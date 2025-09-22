@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <title>Kwitansi Pembayaran</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="/buper.png" />
+  <style>
+    :root {
+      --primary:#1f2937;     /* slate-800 */
+      --muted:#6b7280;       /* gray-500  */
+      --border:#e5e7eb;      /* gray-200  */
+      --bg:#ffffff;
+      --accent:#111827;      /* slate-900 */
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #f7f7f7; color: #111; font: 14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+    .page {
+      max-width: 210mm;      /* A4 width */
+      margin: 18px auto;
+      padding: 0 10mm;
+      background: var(--bg);
+    }
+    .toolbar {
+      display: flex; gap: 8px; justify-content: flex-end; padding: 12px 0;
+    }
+    .toolbar button {
+      padding: 8px 12px; border: 1px solid var(--border); background: #fff; cursor: pointer; border-radius: 8px;
+    }
+    .separator { border-top: 2px dashed #c7c7c7; margin: 12px 0 18px; }
+    .kwitansi {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 0 rgba(17,24,39,.04);
+    }
+    .header {
+      display: grid;
+      grid-template-columns: 72px 1fr 160px;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+    .logo {
+      width: 64px; height: 64px; border: 1px dashed var(--border); border-radius: 8px;
+      display: grid; place-items: center; font-size: 10px; color: var(--muted);
+    }
+    .instansi h1 {
+      margin: 0; font-size: 18px; color: var(--accent); letter-spacing: .3px;
+    }
+    .instansi p {
+      margin: 2px 0 0; color: var(--muted); font-size: 12px;
+    }
+    .meta {
+      font-size: 12px; color: var(--primary);
+      border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: #fafafa;
+    }
+    .title {
+      text-align: center; font-weight: 700; letter-spacing: 3px; margin: 12px 0 8px; color: var(--primary);
+    }
+    .copy-badge {
+      display: inline-block; font-size: 11px; color: #fff; background: #2563eb; /* blue-600 */
+      padding: 4px 8px; border-radius: 999px; margin: 0 auto 10px; text-align: center;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px;
+    }
+    .row {
+      display: grid; grid-template-columns: 140px 1fr; gap: 8px; align-items: center;
+      padding: 6px 0; border-bottom: 1px dashed #f0f0f0;
+    }
+    .label { color: var(--muted); font-size: 12px; }
+    .value { font-weight: 600; color: var(--accent); }
+    .amount {
+      margin-top: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: #fff;
+    }
+    .amount .angka {
+      font-size: 18px; font-weight: 800; letter-spacing: .5px; text-align: right;
+    }
+    .amount .terbilang {
+      margin-top: 6px; font-size: 12px; color: var(--primary); background: #f9fafb; border: 1px dashed var(--border);
+      border-radius: 8px; padding: 8px;
+    }
+    .footer {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 12px;
+    }
+    .ttd-box {
+      border: 1px solid var(--border); border-radius: 10px; padding: 10px; background: #fff;
+    }
+    .ttd-header { color: var(--muted); font-size: 12px; margin-bottom: 40px; }
+    .ttd-name { text-align: center; margin-top: 28px; border-top: 1px solid var(--border); padding-top: 6px; font-weight: 600; }
+    .note { margin-top: 10px; font-size: 11px; color: var(--muted); }
+    @media print {
+      @page {
+        size: 99mm auto; /* lebar 99mm, tinggi otomatis */
+        margin: 5mm;
+      }
+      body { background: #fff; }
+      .toolbar, .separator { display: none !important; }
+      .page { margin: 0; padding: 8mm; }
+      .kwitansi { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="toolbar" >
+      <button onclick="window.print()">Cetak</button>
+    </div>
+
+    <!-- KWITANSI – LEMBAR MAHASISWA -->
+    <div class="kwitansi">
+      <div class="header">
+        <div class="logo">
+          <img src="/buper.png" alt="Logo Buper" style="width: 50px; height: auto;" />
+        </div>
+        <div class="instansi">
+          <h1>STIE BUDI PERTIWI</h1>
+          <p>Jl. Lingkar Tanjungpura, Kondangjaya, Kec. Karawang Tim., Karawang, Jawa Barat 41371 / 0812-8975-6902 · www.domain.ac.id · email@domain.ac.id</p>
+        </div>
+        <div class="meta">
+          <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
+          <div><strong>Tanggal:</strong> <span id="tgl1">{{tanggal}}</span></div>
+        </div>
+      </div>
+
+      <div class="title">KWITANSI</div>
+      <div class="copy-badge">LEMBAR MAHASISWA</div>
+
+      <div class="grid">
+        <div class="row"><div class="label">NIM</div><div class="value" id="nim1">{{nim}}</div></div>
+        <div class="row"><div class="label">Nama</div><div class="value" id="nama1">{{nama}}</div></div>
+        <div class="row"><div class="label">Angkatan</div><div class="value" id="angkatan1">{{angkatan}}</div></div>
+        <div class="row"><div class="label">Jenis Pembayaran</div><div class="value" id="jenis1">{{jenisBayar}}</div></div>
+        <div class="row"><div class="label">Cara Pembayaran</div><div class="value" id="cara1">{{caraBayar}}</div></div>
+        <div class="row"><div class="label">Keterangan</div><div class="value" id="ket1">{{keteranganBayar}}</div></div>
+      </div>
+
+      <div class="amount">
+        <div class="angka" id="nominal1">{{nominal}}</div>
+        <div class="terbilang" id="terbilang1">{{terbilang}}</div>
+      </div>
+
+      <div class="footer">
+        <div class="ttd-box">
+          <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
+          <div class="ttd-name" id="petugas1">{{petugas}}</div>
+        </div>
+      </div>
+      <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
+    </div>
+  </div>
+
+  <script>
+    (function applyQuery() {
+      const q = new URLSearchParams(location.search);
+      if ([...q.keys()].length === 0) return;
+      const map = (id, key) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const val = q.get(key);
+        if (val !== null) el.textContent = val;
+      };
+      const fields = ["no","tgl","nim","nama","angkatan","jenis","cara","ket","nominal","terbilang","penerima","petugas"];
+      fields.forEach(f => { map(f+"1", f); map(f+"2", f); });
+    })();
+  </script>
+</body>
+</html>

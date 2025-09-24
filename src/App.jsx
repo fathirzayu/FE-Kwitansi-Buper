@@ -6,15 +6,18 @@ import { useEffect } from "react";
 import { LoginPage } from "./pages/login";
 import { Navbar } from "./components/navbar";
 import { keepLoginRequest } from "./api/listEndpoint";
+import NotFoundPage from "./pages/notfoundpage";
 
 const router = createBrowserRouter([
-  { path: "/", 
-    element: <Navbar/>,
+  { 
+    path: "/", 
+    element: <Navbar />,
     children: [
-      { path: "/", element: <HomePage/> },
+      { path: "/", element: <HomePage /> },
+      { path: "*", element: <NotFoundPage /> }, 
     ]
   },
-  { path: "/login", element: <LoginPage/> },
+  { path: "/login", element: <LoginPage /> },
 ]);
 
 function App() {

@@ -22,7 +22,7 @@
     }
 
     .page {
-      max-width: 110mm;
+      max-width: 210mm; /* sesuai landscape DL */
       margin: 0 auto;
       padding: 5mm;
       background: var(--bg);
@@ -46,7 +46,7 @@
 
     .header {
       display: grid;
-      grid-template-columns: 50px 1fr 120px;
+      grid-template-columns: 50px 1fr 160px;
       gap: 8px;
       align-items: center;
       border-bottom: 1px solid var(--border);
@@ -82,26 +82,62 @@
     }
 
     .footer { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
-    .ttd-box { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fff; }
+    .ttd-box { border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fff; overflow: hidden; }
     .ttd-header { color: var(--muted); font-size: 10px; margin-bottom: 24px; }
-    .ttd-name { text-align: center; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 4px; font-weight: 600; font-size: 11px; }
+    .ttd-name { text-align: center; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 4px; font-weight: 600; font-size: 11px; }
 
     .note { margin-top: 6px; font-size: 9px; color: var(--muted); }
 
     @media print {
-    @page { 
-      size: 220mm 110mm landscape; /* Envelope DL, landscape */
-      margin: 5mm; 
+      @page {
+        size: 220mm 110mm; /* DL Landscape */
+        margin: 0;
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #fff;
+      }
+
+      .toolbar { display: none !important; }
+
+      .page {
+        width: 220mm;
+        height: 110mm;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        place-items: center;
+        box-shadow: none;
+        page-break-inside: avoid;
+      }
+
+      .scale-wrapper {
+        width: 220mm;
+        height: 110mm;
+        display: grid;
+        place-items: center;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        transform: scale(0.92);       /* sesuaikan kalau masih kepotong */
+        transform-origin: center;
+        overflow: hidden;
+      }
+
+      .kwitansi {
+        width: 200mm;
+        max-height: 100mm;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Kompres sedikit biar pas */
+      .header { padding-bottom: 4px; }
+      .row { padding: 2px 0; }
+      .amount .angka { font-size: 15px; }
+      .instansi h1 { font-size: 15px; }
     }
-    body { background: #fff; }
-    .toolbar, .separator { display: none !important; }
-    .page { 
-      width: 210mm;   /* Sesuaikan agar pas di dalam margin */
-      margin: 0; 
-      padding: 5mm; 
-    }
-    .kwitansi { break-inside: avoid; }
-  }
   </style>
 </head>
 <body>
@@ -110,46 +146,49 @@
       <button onclick="window.print()">Cetak</button>
     </div>
 
-    <div class="kwitansi">
-      <div class="header">
-        <div class="logo">
-          <img src="/buper.png" alt="Logo Buper" style="width: 40px; height: auto;" />
+    <!-- scale wrapper ditambahkan -->
+    <div class="scale-wrapper">
+      <div class="kwitansi">
+        <div class="header">
+          <div class="logo">
+            <img src="/buper.png" alt="Logo Buper" style="width: 40px; height: auto;" />
+          </div>
+          <div class="instansi">
+            <h1>STIE BUDI PERTIWI</h1>
+            <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0812-8975-6902</p>
+          </div>
+          <div class="meta">
+            <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
+            <div><strong>Tanggal:</strong> <span id="tgl1">{{tanggal}}</span></div>
+          </div>
         </div>
-        <div class="instansi">
-          <h1>STIE BUDI PERTIWI</h1>
-          <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0812-8975-6902</p>
+
+        <div class="title">KWITANSI</div>
+        <div class="copy-badge">LEMBAR MAHASISWA</div>
+
+        <div class="grid">
+          <div class="row"><div class="label">NIM</div><div class="value" id="nim1">{{nim}}</div></div>
+          <div class="row"><div class="label">Nama</div><div class="value" id="nama1">{{nama}}</div></div>
+          <div class="row"><div class="label">Angkatan</div><div class="value" id="angkatan1">{{angkatan}}</div></div>
+          <div class="row"><div class="label">Jenis Pembayaran</div><div class="value" id="jenis1">{{jenisBayar}}</div></div>
+          <div class="row"><div class="label">Cara Pembayaran</div><div class="value" id="cara1">{{caraBayar}}</div></div>
+          <div class="row"><div class="label">Keterangan</div><div class="value" id="ket1">{{keteranganBayar}}</div></div>
         </div>
-        <div class="meta">
-          <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
-          <div><strong>Tanggal:</strong> <span id="tgl1">{{tanggal}}</span></div>
+
+        <div class="amount">
+          <div class="angka" id="nominal1">{{nominal}}</div>
+          <div class="terbilang" id="terbilang1">{{terbilang}}</div>
         </div>
-      </div>
 
-      <div class="title">KWITANSI</div>
-      <div class="copy-badge">LEMBAR MAHASISWA</div>
-
-      <div class="grid">
-        <div class="row"><div class="label">NIM</div><div class="value" id="nim1">{{nim}}</div></div>
-        <div class="row"><div class="label">Nama</div><div class="value" id="nama1">{{nama}}</div></div>
-        <div class="row"><div class="label">Angkatan</div><div class="value" id="angkatan1">{{angkatan}}</div></div>
-        <div class="row"><div class="label">Jenis Pembayaran</div><div class="value" id="jenis1">{{jenisBayar}}</div></div>
-        <div class="row"><div class="label">Cara Pembayaran</div><div class="value" id="cara1">{{caraBayar}}</div></div>
-        <div class="row"><div class="label">Keterangan</div><div class="value" id="ket1">{{keteranganBayar}}</div></div>
-      </div>
-
-      <div class="amount">
-        <div class="angka" id="nominal1">{{nominal}}</div>
-        <div class="terbilang" id="terbilang1">{{terbilang}}</div>
-      </div>
-
-      <div class="footer">
-        <div class="ttd-box">
-          <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
-          <div class="ttd-name" id="petugas1">{{petugas}}</div>
+        <div class="footer">
+          <div class="ttd-box">
+            <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
+            <div class="ttd-name" id="petugas1">{{petugas}}</div>
+          </div>
         </div>
-      </div>
 
-      <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
+        <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
+      </div>
     </div>
   </div>
 

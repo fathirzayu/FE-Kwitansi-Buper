@@ -89,12 +89,19 @@
     .note { margin-top: 6px; font-size: 9px; color: var(--muted); }
 
     @media print {
-      @page { size: 110mm 220mm; margin: 5mm; }
-      body { background: #fff; }
-      .toolbar, .separator { display: none !important; }
-      .page { width: 100mm; margin: 0; padding: 5mm; }
-      .kwitansi { break-inside: avoid; }
+    @page { 
+      size: 220mm 110mm landscape; /* Envelope DL, landscape */
+      margin: 5mm; 
     }
+    body { background: #fff; }
+    .toolbar, .separator { display: none !important; }
+    .page { 
+      width: 210mm;   /* Sesuaikan agar pas di dalam margin */
+      margin: 0; 
+      padding: 5mm; 
+    }
+    .kwitansi { break-inside: avoid; }
+  }
   </style>
 </head>
 <body>

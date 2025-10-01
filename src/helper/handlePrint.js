@@ -1,3 +1,4 @@
+import { formatDateDDMMYYYY } from "./formatDateDDMMYYYY";
 import { generatePdf } from "./generatePdf";
 
 export const handlePrint = (item, user) => {
@@ -7,7 +8,7 @@ export const handlePrint = (item, user) => {
     angkatan: item.angkatan,
     jenisBayar: item.jenis_bayar,
     caraBayar: item.cara_bayar,
-    tanggalBayar: item.tanggal_bayar,
+    tanggalBayar: formatDateDDMMYYYY(item.tanggal_bayar),
     nominal: item.nominal,
     keteranganBayar: item.keterangan_bayar,
     terbilang: item.terbilang,

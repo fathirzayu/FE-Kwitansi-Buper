@@ -17,6 +17,7 @@ export const generatePdf = async (data, admins) => {
              .replace(/{{angkatan}}/g, data.angkatan)
              .replace(/{{jenisBayar}}/g, data.jenisBayar)
              .replace(/{{caraBayar}}/g, data.caraBayar)
+             .replace(/{{tanggalBayar}}/g, data.tanggalBayar)
              .replace(/{{keteranganBayar}}/g, data.keteranganBayar)
              .replace(/{{nominal}}/g, data.nominal)
              .replace(/{{terbilang}}/g, data.terbilang)

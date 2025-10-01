@@ -77,6 +77,7 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
     angkatan: Yup.string().required("Tahun Angkatan is required"),
     jenisBayar: Yup.string().required("Jenis Pembayaran is required"),
     caraBayar: Yup.string().required("Cara Pembayaran is required"),
+    tanggalBayar: Yup.string().required("Tanggal Pembayaran is required"),
     nominal: Yup.string().required("Nominal is required"),
     keteranganBayar: Yup.string().required("Keterangan Bayar is required"),
   });
@@ -123,6 +124,7 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
         angkatan: "",
         jenisBayar: "",
         caraBayar: "",
+        tanggalBayar: "",
         nominal: "",
         keteranganBayar: "",
         terbilang: terbilang,
@@ -276,6 +278,21 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
                         <ErrorMessage
                           component="div"
                           name="nominal"
+                          style={{ color: "red" }}
+                        />
+                      </FormControl>
+
+                      <FormControl>
+                        <FormLabel textColor={"black"}>Tanggal Pembayaran</FormLabel>
+                        <Field
+                          as={Input}
+                          type="date"
+                          name="tanggalBayar"
+                          bgColor="white"
+                        />
+                        <ErrorMessage
+                          component="div"
+                          name="tanggalBayar"
                           style={{ color: "red" }}
                         />
                       </FormControl>

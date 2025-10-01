@@ -49,7 +49,11 @@ export const ModalAddStudent = ({ isOpen, onClose }) => {
   const handleSubmit = async (data, actions) => {
     setLoading(true);
     try {
-      await addStudent(data);
+      const payload = {
+      ...data,
+      nama: data.nama.toUpperCase(),
+    };
+      await addStudent(payload);
       toast({
         title: "Mahasiswa ditambahkan",
         description: "Data mahasiswa berhasil ditambahkan.",

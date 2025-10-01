@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="utf-8" />
-  <title>Kwitansi Pembayaran</title>
+  <title>KWITANSI-{{noKwitansi}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" type="image/png" href="/buper.png" />
   <style>
@@ -88,56 +88,98 @@
 
     .note { margin-top: 6px; font-size: 9px; color: var(--muted); }
 
-    @media print {
-      @page {
-        size: 220mm 110mm; /* DL Landscape */
-        margin: 0;
-      }
+@media print {
+  @page {
+    size: 220mm 99mm; /* DL Landscape, bisa diubah sesuai kertas continuous */
+        margin: 4mm 5px;  /* atas-bawah 4mm, kiri-kanan 2px */
 
-      html, body {
-        margin: 0;
-        padding: 0;
-        background: #fff;
-      }
+  }
 
-      .toolbar { display: none !important; }
+  body, html {
+    margin: 0;
+    padding: 3;
+    background: #fff !important;
+    color: #000 !important;
+    font-family: "Courier New", monospace !important; /* font jelas untuk dot matrix */
+    font-size: 10pt !important;
+    line-height: 1;
+  }
 
-      .page {
-        width: 220mm;
-        height: 110mm;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        place-items: center;
-        box-shadow: none;
-        page-break-inside: avoid;
-      }
+  /* Hilangkan elemen non-print */
+  .toolbar {
+    display: none !important;
+  }
 
-      .scale-wrapper {
-        width: 220mm;
-        height: 110mm;
-        display: grid;
-        place-items: center;
-        page-break-inside: avoid;
-        break-inside: avoid;
-        transform: scale(0.92);       /* sesuaikan kalau masih kepotong */
-        transform-origin: center;
-        overflow: hidden;
-      }
+  /* Sederhanakan layout */
+  .page, .kwitansi, .header, .row, .amount, .footer {
+    box-shadow: none !important;
+    border: none !important;
+    background: #fff !important;
+    width: 100% !important;
+    padding: 0 !important;
+  }
 
-      .kwitansi {
-        width: 200mm;
-        max-height: 100mm;
-        page-break-inside: avoid;
-        break-inside: avoid;
-      }
+  /* Header */
+  .instansi h1 {
+    font-size: 14pt !important;
+    font-weight: bold;
+  }
+  .instansi p {
+    font-size: 10pt !important;
+  }
 
-      /* Kompres sedikit biar pas */
-      .header { padding-bottom: 4px; }
-      .row { padding: 2px 0; }
-      .amount .angka { font-size: 15px; }
-      .instansi h1 { font-size: 15px; }
-    }
+  /* Grid jadi tabel sederhana */
+  .grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* tetap 2 kolom */
+    gap: 4mm 8mm;
+  }
+
+  .row {
+    display: grid !important;
+    grid-template-columns: 35mm 1fr !important; /* label dan value sejajar */
+    gap: 2mm;
+    border: none !important;
+  }
+  .label {
+    display: inline-block;
+    width: 40mm; /* rata kiri */
+    font-weight: bold;
+  }
+  .value {
+    display: inline-block;
+  }
+
+  /* Nominal */
+  .amount {
+    margin-top: 2mm;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    padding: 2mm 0;
+  }
+  .amount .angka {
+    font-size: 11pt !important;
+    font-weight: bold;
+    text-align: right;
+  }
+  .amount .terbilang {
+    font-size: 10pt !important;
+  }
+
+  /* TTD */
+  .footer {
+    margin-top: 2mm !important; 
+    display: flex !important;
+    align-items: flex-end;     /* ratakan vertikal */
+    justify-content: space-between; /* biar note di kiri, ttd di kanan */
+  }
+
+  .note {
+    margin-top: 1 !important;
+    align-self: flex-end; /* posisikan sejajar bawah dengan footer */
+  }
+}
+
   </style>
 </head>
 <body>
@@ -159,7 +201,7 @@
           </div>
           <div class="meta">
             <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
-            <div><strong>Tanggal:</strong> <span id="tgl1">{{tanggal}}</span></div>
+            <div><strong>Tanggal Cetakan:</strong> <span id="tgl1">{{tanggal}}</span></div>
           </div>
         </div>
 
@@ -172,6 +214,7 @@
           <div class="row"><div class="label">Angkatan</div><div class="value" id="angkatan1">{{angkatan}}</div></div>
           <div class="row"><div class="label">Jenis Pembayaran</div><div class="value" id="jenis1">{{jenisBayar}}</div></div>
           <div class="row"><div class="label">Cara Pembayaran</div><div class="value" id="cara1">{{caraBayar}}</div></div>
+          <div class="row"><div class="label">Tanggal Pembayaran</div><div class="value" id="tglbayar1">{{tanggalBayar}}</div></div>
           <div class="row"><div class="label">Keterangan</div><div class="value" id="ket1">{{keteranganBayar}}</div></div>
         </div>
 
@@ -202,7 +245,7 @@
         const val = q.get(key);
         if (val !== null) el.textContent = val;
       };
-      const fields = ["no","tgl","nim","nama","angkatan","jenis","cara","ket","nominal","terbilang","penerima","petugas"];
+      const fields = ["no","tgl","nim","nama","angkatan","jenis","cara","tglbayar","ket","nominal","terbilang","penerima","petugas"];
       fields.forEach(f => { map(f+"1", f); map(f+"2", f); });
     })();
   </script>

@@ -34,6 +34,7 @@ import { handlePrint } from "../helper/handlePrint";
 import SubmenuDatePicker from "../helper/datePicker";
 import { formatDateLocal } from "../helper/formatDateLocal";
 import { exportKwitansi, fetchKwitansi } from "../api/listEndpoint";
+import { formatDateDDMMYYYY } from "../helper/formatDateDDMMYYYY";
 
 export const TableKwitansi = () => {
   const user = useSelector((state) => state.user.value);
@@ -47,7 +48,7 @@ export const TableKwitansi = () => {
 
   const params = new URLSearchParams(location.search);
   const search = params.get("search") || "";
-  const sort = params.get("sort") || "createdAt";
+  const sort = params.get("sort") || "tanggal_bayar";
   const order = params.get("order") || "desc";
   const page = parseInt(params.get("page") || 1);
   const limit = parseInt(params.get("limit") || 5);
@@ -95,6 +96,38 @@ useEffect(() => {
     }
   };
 
+  // Inisialisasi selectedDate dari query params saat komponen pertama kali mount
+  useEffect(() => {
+    if (startDate && endDate) {
+      // convert dari string ke Date
+      setSelectedDate({
+        from: new Date(startDate),
+        to: new Date(endDate),
+      });
+    } else {
+      setSelectedDate(null);
+    }
+  }, [startDate, endDate]);
+
+  // Handle perubahan tanggal dari SubmenuDatePicker
+  const handleDateChange = (range) => {
+    setSelectedDate(range);
+
+    if (range?.from && range?.to) {
+      const from = formatDateLocal(range.from);
+      const to = formatDateLocal(range.to);
+
+      params.set("startDate", from);
+      params.set("endDate", to);
+      params.set("page", 1);
+      navigate({ search: params.toString() });
+    } else {
+      params.delete("startDate");
+      params.delete("endDate");
+      params.set("page", 1);
+      navigate({ search: params.toString() });
+    }
+  };
 
   return (
     <Stack width="full" gap="5" p={5}>
@@ -169,24 +202,7 @@ useEffect(() => {
             <PopoverBody>
               <SubmenuDatePicker
                 selected={selectedDate}
-                onChange={(range) => {
-                  setSelectedDate(range);
-
-                  if (range?.from && range?.to) {
-                    const from = formatDateLocal(range.from);
-                    const to = formatDateLocal(range.to);
-
-                    params.set("startDate", from);
-                    params.set("endDate", to);
-                    params.set("page", 1);
-                    navigate({ search: params.toString() });
-                  } else {
-                    params.delete("startDate");
-                    params.delete("endDate");
-                    params.set("page", 1);
-                    navigate({ search: params.toString() });
-                  }
-                }}
+                  onChange={handleDateChange}
               />
             </PopoverBody>
           </PopoverContent>
@@ -233,12 +249,12 @@ useEffect(() => {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                params.set("sort", "createdAt");
+                params.set("sort", "tanggal_bayar");
                 params.set("page", 1);
                 navigate({ search: params.toString() });
               }}
             >
-              Tanggal
+              Tanggal Bayar
             </MenuItem>
           </MenuList>
         </Menu>
@@ -304,19 +320,27 @@ useEffect(() => {
         <Table size="sm" variant="simple" colorScheme="gray">
           <Thead bg="yellow">
             <Tr>
-              <Th fontSize={"xl"} padding={4}>TANGGAL</Th>
+              <Th fontSize={"xl"} padding={4}>TANGGAL PEMBAYARAN</Th>
               <Th fontSize={"xl"} padding={4}>NIM</Th>
               <Th fontSize={"xl"} padding={4}>NAMA MHS</Th>
               <Th fontSize={"xl"} padding={4}>ANGKATAN</Th>
               <Th fontSize={"xl"} padding={4}>JENIS BAYAR</Th>
               <Th fontSize={"xl"} padding={4}>CARA BAYAR</Th>
               <Th fontSize={"xl"} padding={4}>KETERANGAN BAYAR</Th>
+              <Th fontSize={"xl"} padding={4}>TANGGAL CETAKAN</Th>
               <Th fontSize={"xl"} padding={4}>ACTIONS</Th>
             </Tr>
           </Thead>
           <Tbody>
             {dataKwitansi.map((item) => (
               <Tr key={item.id}>
+                <Td>{formatDateDDMMYYYY(item.tanggal_bayar)}</Td>
+                <Td isNumeric>{item.nim}</Td>
+                <Td>{item.nama}</Td>
+                <Td isNumeric>{item.angkatan}</Td>
+                <Td>{item.jenis_bayar}</Td>
+                <Td>{item.cara_bayar}</Td>
+                <Td>{item.keterangan_bayar}</Td>
                 <Td>
                   {new Date(item.createdAt).toLocaleDateString("id-ID", {
                     day: "2-digit",
@@ -324,12 +348,6 @@ useEffect(() => {
                     year: "numeric",
                   })}
                 </Td>
-                <Td isNumeric>{item.nim}</Td>
-                <Td>{item.nama}</Td>
-                <Td isNumeric>{item.angkatan}</Td>
-                <Td>{item.jenis_bayar}</Td>
-                <Td>{item.cara_bayar}</Td>
-                <Td>{item.keterangan_bayar}</Td>
                 <Td>
                   <Button
                     size="sm"

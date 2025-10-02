@@ -91,7 +91,7 @@
     @media print {
       @page {
         size: 220mm 99mm; /* DL Landscape, bisa diubah sesuai kertas continuous */
-            margin: 4mm 5px;  /* atas-bawah 4mm, kiri-kanan 2px */
+        margin: 4mm 2mm;  /* atas-bawah 4mm, kiri-kanan 2px */
 
       }
 
@@ -102,7 +102,7 @@
         color: #000 !important;
         font-family: "Courier New", monospace !important; /* font jelas untuk dot matrix */
         font-size: 12pt !important;
-        line-height: 9pt;
+        line-height: 11pt;
         -webkit-font-smoothing: none !important;
         text-rendering: optimizeSpeed !important;
       }
@@ -138,10 +138,26 @@
       }
 
       .row {
-        display: grid !important;
-        grid-template-columns: 35mm 1fr !important; /* label dan value sejajar */
-        gap: 2mm;
-        border: none !important;
+        display: grid;
+        grid-template-columns: max-content 10px 1fr; /* label : value */
+        gap: 4px;
+        align-items: center;
+        padding: 4px 0;
+        border-bottom: 1px dashed #ffffff;
+      }
+
+      .label::after {
+        content: ":";      /* tambahkan titik dua otomatis */
+        display: inline-block;
+        width: 6px;        /* jarak dari value */
+        text-align: right;
+        margin-left: 2px;
+      }
+
+      .value {
+        font-weight: 600;
+        color: var(--accent);
+        font-size: 11px;
       }
       .label {
         display: inline-block;
@@ -165,7 +181,7 @@
         text-align: right;
       }
       .amount .terbilang {
-        font-size: 10pt !important;
+        font-size: 11pt !important;
       }
 
       /* TTD */
@@ -205,6 +221,42 @@
         background: none !important;
       }
 
+      .header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-start !important;
+        border: none !important;
+        padding: 0 !important;
+        margin-bottom: 4mm !important;
+      }
+
+      .instansi {
+        flex: 1;
+      }
+
+      .meta {
+        font-size: 9px;  /* lebih kecil dari default 11px */
+        color: var(--primary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 6px 8px;
+        background: #FFFFFF;
+      }
+      .logo {
+        display: none !important;
+      }
+      .copy-badge {
+        display: block !important;
+        background: none !important;
+        color: #000 !important;
+        font-size: 10pt !important;
+        font-weight: bold !important;
+        text-align: left !important;
+        margin: 2mm 0 !important;
+        padding: 0 !important;
+        border: none !important;
+      }
+
     }
 
   </style>
@@ -236,13 +288,42 @@
         <div class="copy-badge">LEMBAR MAHASISWA</div>
 
         <div class="grid">
-          <div class="row"><div class="label">NIM</div><div class="value" id="nim1">{{nim}}</div></div>
-          <div class="row"><div class="label">Nama</div><div class="value" id="nama1">{{nama}}</div></div>
-          <div class="row"><div class="label">Angkatan</div><div class="value" id="angkatan1">{{angkatan}}</div></div>
-          <div class="row"><div class="label">Jenis Pembayaran</div><div class="value" id="jenis1">{{jenisBayar}}</div></div>
-          <div class="row"><div class="label">Cara Pembayaran</div><div class="value" id="cara1">{{caraBayar}}</div></div>
-          <div class="row"><div class="label">Tanggal Pembayaran</div><div class="value" id="tglbayar1">{{tanggalBayar}}</div></div>
-          <div class="row"><div class="label">Keterangan</div><div class="value" id="ket1">{{keteranganBayar}}</div></div>
+          <div class="row">
+            <div class="label">NIM</div>
+            <div class="colon">:</div>
+            <div class="value" id="nim1">{{nim}}</div>
+          </div>
+          <div class="row">
+            <div class="label">Nama</div>
+            <div class="colon">:</div>
+            <div class="value" id="nama1">{{nama}}</div>
+          </div>
+          <div class="row">
+            <div class="label">Angkatan</div>
+            <div class="colon">:</div>
+            <div class="value" id="angkatan1">{{angkatan}}</div>
+          </div>
+
+                  <div class="row">
+            <div class="label">Jenis Pembayaran</div>
+            <div class="colon">:</div>
+            <div class="value" id="jenis1">{{jenisBayar}}</div>
+          </div>
+          <div class="row">
+            <div class="label">Cara Pembayaran</div>
+            <div class="colon">:</div>
+            <div class="value" id="cara1">{{caraBayar}}</div>
+          </div>
+          <div class="row">
+            <div class="label">Tanggal Pembayaran</div>
+            <div class="colon">:</div>
+            <div class="value" id="tglbayar1">{{tanggalBayar}}</div>
+          </div>
+          <div class="row">
+            <div class="label">Keterangan</div>
+            <div class="colon">:</div>
+            <div class="value" id="ket1">{{keteranganBayar}}</div>
+          </div>
         </div>
 
         <div class="amount">
@@ -251,13 +332,13 @@
         </div>
 
         <div class="footer">
+          <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
           <div class="ttd-box">
             <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
             <div class="ttd-name" id="petugas1">{{petugas}}</div>
           </div>
         </div>
 
-        <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
       </div>
     </div>
   </div>

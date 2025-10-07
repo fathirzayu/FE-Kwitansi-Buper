@@ -22,9 +22,9 @@
     }
 
     .page {
-      max-width: 210mm; /* sesuai landscape DL */
+      max-width: 210mm;
       margin: 0 auto;
-      padding: 5mm;
+      padding: 10mm; /* gap dalam seluruh isi */
       background: var(--bg);
     }
 
@@ -50,7 +50,7 @@
       gap: 8px;
       align-items: center;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
+      /* padding-bottom: 6px; */
     }
 
     .logo { width: 50px; height: 50px; border: 1px dashed var(--border);
@@ -71,9 +71,21 @@
     }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
-    .row { display: grid; grid-template-columns: 110px 1fr; gap: 6px; align-items: center; padding: 4px 0; border-bottom: 1px dashed #f0f0f0; }
-    .label { color: var(--muted); font-size: 11px; }
-    .value { font-weight: 600; color: var(--accent); font-size: 11px; }
+    .row {
+      display: grid;
+      grid-template-columns: 110px 10px 1fr; /* label | colon | value */
+      gap: 6px;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px dashed #f0f0f0;
+    }
+
+    .label, .colon, .value {
+      font-size: 10pt !important;
+    }
+
+    .label { color: var(--muted); font-weight: 500; }
+    .value { font-weight: 600; color: var(--accent); }
 
     .amount { margin-top: 6px; border: 1px solid var(--border); border-radius: 8px; padding: 6px; background: #fff; }
     .amount .angka { font-size: 16px; font-weight: 700; letter-spacing: .5px; text-align: right; }
@@ -90,9 +102,8 @@
 
     @media print {
       @page {
-        size: 220mm 99mm; /* DL Landscape, bisa diubah sesuai kertas continuous */
-        margin: 4mm 2mm;  /* atas-bawah 4mm, kiri-kanan 2px */
-
+        size: 220mm 99mm;
+        margin: 0mm 6mm 0mm 2mm;
       }
 
       body, html {
@@ -100,80 +111,59 @@
         padding: 0;
         background: #fff !important;
         color: #000 !important;
-        font-family: "Courier New", monospace !important; /* font jelas untuk dot matrix */
-        font-size: 12pt !important;
-        line-height: 11pt;
+        font-family: "Courier New", monospace !important;
+        font-size: 11pt !important;
+        line-height: 9pt !important; /* 🔹 lebih rapat */
         -webkit-font-smoothing: none !important;
         text-rendering: optimizeSpeed !important;
       }
 
-      /* Hilangkan elemen non-print */
-      .toolbar {
-        display: none !important;
+      .page {
+        padding-top: 0 !important;
       }
 
-      /* Sederhanakan layout */
+      .toolbar { display: none !important; }
+
       .page, .kwitansi, .header, .row, .amount, .footer {
         box-shadow: none !important;
         border: none !important;
         background: #fff !important;
         width: 100% !important;
-        padding: 0 !important;
       }
 
-      /* Header */
-      .instansi h1 {
-        font-size: 14pt !important;
-        font-weight: bold;
-      }
-      .instansi p {
-        font-size: 10pt !important;
-      }
-
-      /* Grid jadi tabel sederhana */
-      .grid {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important; /* tetap 2 kolom */
-        gap: 4mm 8mm;
-      }
+      .instansi h1 { font-size: 11pt !important; font-weight: bold; }
+      .instansi p { font-size: 10pt !important; margin: 0 !important; }
 
       .row {
         display: grid;
-        grid-template-columns: max-content 10px 1fr; /* label : value */
-        gap: 4px;
+        grid-template-columns: max-content 10px 1fr;
+        gap: 2px !important; /* 🔹 lebih rapat */
         align-items: center;
-        padding: 4px 0;
+        padding: 2px 0 !important; /* 🔹 dikurangi */
         border-bottom: 1px dashed #ffffff;
       }
 
-      .label::after {
-        content: ":";      /* tambahkan titik dua otomatis */
-        display: inline-block;
-        width: 6px;        /* jarak dari value */
-        text-align: right;
-        margin-left: 2px;
-      }
-
-      .value {
-        font-weight: 600;
-        color: var(--accent);
-        font-size: 11px;
-      }
       .label {
         display: inline-block;
-        width: 40mm; /* rata kiri */
+        width: 40mm;
         font-weight: bold;
+        font-size: 10pt !important;
+      }
+      .colon {
+        width: 10px;
+        text-align: center;
+        font-size: 10pt !important;
       }
       .value {
-        display: inline-block;
+        font-weight: 600;
+        font-size: 10pt !important;
       }
 
-      /* Nominal */
       .amount {
-        margin-top: 2mm;
         border-top: 1px solid #000;
         border-bottom: 1px solid #000;
-        padding: 2mm 0;
+        padding: 1mm 0 !important; /* 🔹 dikurangi */
+        margin-top: 2mm !important;
       }
       .amount .angka {
         font-size: 11pt !important;
@@ -181,44 +171,30 @@
         text-align: right;
       }
       .amount .terbilang {
-        font-size: 11pt !important;
+        font-size: 10pt !important;
+        border: none !important;
+        background: none !important;
+        margin-top: 1mm !important; /* 🔹 lebih dekat */
       }
 
-      /* TTD */
       .footer {
-        margin-top: 2mm !important; 
         display: flex !important;
-        align-items: flex-end;     /* ratakan vertikal */
-        justify-content: space-between; /* biar note di kiri, ttd di kanan */
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-top: 2mm !important; /* 🔹 lebih dekat */
       }
 
       .note {
-        margin-top: 1 !important;
-        align-self: flex-end; /* posisikan sejajar bawah dengan footer */
-      }
-
-      * {
-        color: #000 !important;
-        border-color: #000 !important;
-        -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-      }
-
-      /* Semua teks hitam */
-      body, html, .kwitansi, .row, .label, .value, .title, .copy-badge, .amount, .terbilang, .footer, .ttd-box, .note {
-        color: #000 !important;
-        font-weight: bold !important;
-      }
-
-      /* Hapus border pada terbilang dan tanda tangan */
-      .amount .terbilang {
-        border: none !important;
-        background: none !important;
+        align-self: flex-end;
+        font-size: 9pt !important;
+        font-weight: bold;
+        margin: 0 !important;
       }
 
       .ttd-box {
         border: none !important;
         background: none !important;
+        font-weight: bold !important;
       }
 
       .header {
@@ -227,38 +203,41 @@
         align-items: flex-start !important;
         border: none !important;
         padding: 0 !important;
-        margin-bottom: 4mm !important;
-      }
-
-      .instansi {
-        flex: 1;
       }
 
       .meta {
-        font-size: 9px;  /* lebih kecil dari default 11px */
-        color: var(--primary);
-        border: 1px solid var(--border);
+        font-size: 10pt !important;
+        border: 0.5px solid var(--border);
         border-radius: 8px;
-        padding: 6px 8px;
-        background: #FFFFFF;
+        padding: 4px 6px !important;
+        background: none !important;
       }
-      .logo {
-        display: none !important;
-      }
+
+      .logo { display: none !important; }
+
       .copy-badge {
         display: block !important;
         background: none !important;
         color: #000 !important;
-        font-size: 10pt !important;
+        font-size: 8pt !important;
         font-weight: bold !important;
         text-align: left !important;
-        margin: 2mm 0 !important;
         padding: 0 !important;
-        border: none !important;
       }
 
-    }
+      .terbilang {
+        font-size: 10pt !important;
+        font-weight: bold !important;
+      }
 
+      * {
+        color: #000 !important;
+        border-color: #000 !important;
+        font-weight: bold !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -267,78 +246,73 @@
       <button onclick="window.print()">Cetak</button>
     </div>
 
-    <!-- scale wrapper ditambahkan -->
-    <div class="scale-wrapper">
-      <div class="kwitansi">
-        <div class="header">
-          <div class="logo">
-            <img src="/buper.png" alt="Logo Buper" style="width: 40px; height: auto;" />
-          </div>
-          <div class="instansi">
-            <h1>STIE BUDI PERTIWI</h1>
-            <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0812-8975-6902</p>
-          </div>
-          <div class="meta">
-            <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
-            <div><strong>Tanggal Cetakan:</strong> <span id="tgl1">{{tanggal}}</span></div>
-          </div>
+    <div class="kwitansi">
+      <div class="header">
+        <div class="logo">
+          <img src="/buper.png" alt="Logo Buper" style="width: 40px; height: auto;" />
         </div>
-
-        <div class="title">KWITANSI</div>
-        <div class="copy-badge">LEMBAR MAHASISWA</div>
-
-        <div class="grid">
-          <div class="row">
-            <div class="label">NIM</div>
-            <div class="colon">:</div>
-            <div class="value" id="nim1">{{nim}}</div>
-          </div>
-          <div class="row">
-            <div class="label">Nama</div>
-            <div class="colon">:</div>
-            <div class="value" id="nama1">{{nama}}</div>
-          </div>
-          <div class="row">
-            <div class="label">Angkatan</div>
-            <div class="colon">:</div>
-            <div class="value" id="angkatan1">{{angkatan}}</div>
-          </div>
-
-                  <div class="row">
-            <div class="label">Jenis Pembayaran</div>
-            <div class="colon">:</div>
-            <div class="value" id="jenis1">{{jenisBayar}}</div>
-          </div>
-          <div class="row">
-            <div class="label">Cara Pembayaran</div>
-            <div class="colon">:</div>
-            <div class="value" id="cara1">{{caraBayar}}</div>
-          </div>
-          <div class="row">
-            <div class="label">Tanggal Pembayaran</div>
-            <div class="colon">:</div>
-            <div class="value" id="tglbayar1">{{tanggalBayar}}</div>
-          </div>
-          <div class="row">
-            <div class="label">Keterangan</div>
-            <div class="colon">:</div>
-            <div class="value" id="ket1">{{keteranganBayar}}</div>
-          </div>
+        <div class="instansi">
+          <h1>STIE BUDI PERTIWI</h1>
+          <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0812-8975-6902</p>
         </div>
-
-        <div class="amount">
-          <div class="angka" id="nominal1">{{nominal}}</div>
-          <div class="terbilang" id="terbilang1">{{terbilang}}</div>
+        <div class="meta">
+          <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>
+          <div><strong>Tanggal Cetakan:</strong> <span id="tgl1">{{tanggal}}</span></div>
         </div>
+      </div>
 
-        <div class="footer">
-          <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
-          <div class="ttd-box">
-            <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
-            <div class="ttd-name" id="petugas1">{{petugas}}</div>
-          </div>
+      <div class="title">KWITANSI</div>
+      <div class="copy-badge">LEMBAR MAHASISWA</div>
+
+      <div class="grid">
+        <div class="row">
+          <div class="label">NIM</div>
+          <div class="colon">:</div>
+          <div class="value" id="nim1">{{nim}}</div>
         </div>
+        <div class="row">
+          <div class="label">Nama</div>
+          <div class="colon">:</div>
+          <div class="value" id="nama1">{{nama}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Angkatan</div>
+          <div class="colon">:</div>
+          <div class="value" id="angkatan1">{{angkatan}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Jenis Pembayaran</div>
+          <div class="colon">:</div>
+          <div class="value" id="jenis1">{{jenisBayar}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Cara Pembayaran</div>
+          <div class="colon">:</div>
+          <div class="value" id="cara1">{{caraBayar}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Tanggal Pembayaran</div>
+          <div class="colon">:</div>
+          <div class="value" id="tglbayar1">{{tanggalBayar}}</div>
+        </div>
+        <div class="row">
+          <div class="label">Keterangan</div>
+          <div class="colon">:</div>
+          <div class="value" id="ket1">{{keteranganBayar}}</div>
+        </div>
+      </div>
 
+      <div class="amount">
+        <div class="angka" id="nominal1">{{nominal}}</div>
+        <div class="terbilang" id="terbilang1">{{terbilang}}</div>
+      </div>
+
+      <div class="footer">
+        <div class="note">Catatan: Simpan kwitansi ini sebagai bukti pembayaran yang sah.</div>
+        <div class="ttd-box">
+          <div class="ttd-header" id="jabatan1">{{jabatan}}</div>
+          <div class="ttd-name" id="petugas1">{{petugas}}</div>
+        </div>
       </div>
     </div>
   </div>

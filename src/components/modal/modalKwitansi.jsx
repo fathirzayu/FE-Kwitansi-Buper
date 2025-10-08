@@ -54,7 +54,7 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
   ];
 
   const keteranganBayar = ["CICILAN", "LUNAS"];
-  const caraPembayaran = ["TRANSFER", "CASH"];
+  const caraPembayaran = ["TRANSFER", "CASH", "QRIS"];
 
   useEffect(() => {
     if (!nimInput) return;

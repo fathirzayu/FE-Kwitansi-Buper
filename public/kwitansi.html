@@ -103,8 +103,7 @@
     @media print {
       @page {
         size: 220mm 99mm;
-        margin: 2mm 6mm 2mm 2mm;
-        border: 1px solid black;
+        margin: 0mm 6mm 0mm 2mm;
       }
 
       body, html {
@@ -184,6 +183,15 @@
         justify-content: space-between;
         margin-top: 2mm !important; /* 🔹 lebih dekat */
       }
+      .ttd-header {
+        font-size: 11pt !important;
+        font-weight: bold;
+      }
+
+      .ttd-name {
+        font-size: 11pt !important;
+        font-weight: bold;
+      }
 
       .note {
         align-self: flex-end;
@@ -198,16 +206,6 @@
         font-weight: bold !important;
       }
 
-      .ttd-header {
-        font-weight: bold;
-        font-size: 11pt;
-      }
-
-      .ttd-name {
-        font-weight: bold;
-        font-size: 11pt;
-      }
-
       .header {
         display: flex !important;
         justify-content: space-between !important;
@@ -220,8 +218,8 @@
         font-size: 10pt !important;
         border: 0.5px solid var(--border);
         border-radius: 8px;
+        padding: 4px 6px !important;
         background: none !important;
-        text-align: end;
       }
 
       .logo { display: none !important; }
@@ -236,10 +234,13 @@
         padding: 0 !important;
       }
 
-      .terbilang {
-        /* font-size: 10pt !important;
-        font-weight: bold !important; */
+      .copy-badge {
         display: none !important;
+      }
+
+      .terbilang {
+        font-size: 10pt !important;
+        font-weight: bold !important;
       }
 
       * {
@@ -265,7 +266,7 @@
         </div>
         <div class="instansi">
           <h1>STIE BUDI PERTIWI</h1>
-          <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0267 7310470</p>
+          <p>Jl. Lingkar Tanjungpura, Kondangjaya, Karawang, Jawa Barat 41371 / 0812-8975-6902</p>
         </div>
         <div class="meta">
           <div><strong>No. Kwitansi:</strong> <span id="no1">{{noKwitansi}}</span></div>

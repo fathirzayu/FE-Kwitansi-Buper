@@ -51,6 +51,8 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
     "BIAYA REMEDIAL",
     "BIAYA KKN",
     "BIAYA KONVERSI",
+    "FOTO WISUDA",
+    "TAMBAHAN UNDANGAN WISUDA"
   ];
 
   const keteranganBayar = ["CICILAN", "LUNAS"];

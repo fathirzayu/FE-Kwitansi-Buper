@@ -31,6 +31,9 @@ function App() {
       dispatch(setValue({ fullname, username, email, jabatan }));
     } catch (err) {
       console.log(err);
+      console.log("Token invalid atau expired:", err);
+      localStorage.removeItem("token");
+      window.location.href = "/login";
     }
   };
 

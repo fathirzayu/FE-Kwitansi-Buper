@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, HStack } from "@chakra-ui/react";
 
 export const Paginations = ({ totalPages = 1, currentPage = 1, onPageChange }) => {
   const goToPage = (page) => {

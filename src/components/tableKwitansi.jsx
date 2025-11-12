@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon, CalendarIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import "react-day-picker/dist/style.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Paginations } from "./pagination";
 import { useSelector } from "react-redux";
@@ -53,12 +53,10 @@ export const TableKwitansi = () => {
   const page = parseInt(params.get("page") || 1);
   const limit = parseInt(params.get("limit") || 5);
 
-  // filter tanggal dari query
   const startDate = params.get("startDate") || null;
   const endDate = params.get("endDate") || null;
 
-
-  const fetchDataKwitansi = async () => {
+  const fetchDataKwitansi = useCallback(async () => {
     try {
       const res = await fetchKwitansi({ search, sort, order, page, limit, startDate, endDate });
       setDataKwitansi(res?.data || []);
@@ -66,13 +64,12 @@ export const TableKwitansi = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [search, sort, order, page, limit, startDate, endDate]);
 
-useEffect(() => {
-  fetchDataKwitansi();
-}, [location.search]);
+  useEffect(() => {
+    fetchDataKwitansi();
+  }, [fetchDataKwitansi]);
 
-  // handle search kwitansi
   const handleSearch = (e) => {
     const value = e.target.value;
     params.set("search", value);
@@ -96,10 +93,8 @@ useEffect(() => {
     }
   };
 
-  // Inisialisasi selectedDate dari query params saat komponen pertama kali mount
   useEffect(() => {
     if (startDate && endDate) {
-      // convert dari string ke Date
       setSelectedDate({
         from: new Date(startDate),
         to: new Date(endDate),
@@ -109,14 +104,12 @@ useEffect(() => {
     }
   }, [startDate, endDate]);
 
-  // Handle perubahan tanggal dari SubmenuDatePicker
   const handleDateChange = (range) => {
     setSelectedDate(range);
 
     if (range?.from && range?.to) {
       const from = formatDateLocal(range.from);
       const to = formatDateLocal(range.to);
-
       params.set("startDate", from);
       params.set("endDate", to);
       params.set("page", 1);

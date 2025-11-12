@@ -30,7 +30,7 @@ export const ModalKwitansi = ({ isOpen, onClose }) => {
   const toast = useToast();
   const [terbilang, setTerbilang] = useState("");
   const [nimInput, setNimInput] = useState("");
-  const [dataMhs, setDataMhs] = useState(null);
+  const [, setDataMhs] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const formikRef = React.useRef();

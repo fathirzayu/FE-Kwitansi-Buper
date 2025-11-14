@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Box, Flex, Stack, Tooltip, useDisclosure, IconButton, Container } from "@chakra-ui/react";
 import { ModalAddStudent } from "../components/modal/modalAddStudent";
 import { ModalKwitansi } from "../components/modal/modalKwitansi";
 import { ModalSettings } from "../components/modal/modalSettings";
@@ -11,62 +11,103 @@ export const HomePage = () => {
   const addStudentModal = useDisclosure();
   const kwitansiModal = useDisclosure();
   const settingsModal = useDisclosure();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  // Auth check - moved to top for clarity
   useEffect(() => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
     }
   }, [navigate]);
 
+  // Action buttons configuration for easier maintenance
+  const actionButtons = [
+    {
+      icon: PlusSquareIcon,
+      label: "Tambah Mahasiswa",
+      hoverColor: "red.400",
+      onClick: addStudentModal.onOpen,
+      ariaLabel: "Tambah mahasiswa baru",
+    },
+    {
+      icon: EditIcon,
+      label: "Buat Kwitansi",
+      hoverColor: "green.400",
+      onClick: kwitansiModal.onOpen,
+      ariaLabel: "Buat kwitansi baru",
+    },
+    {
+      icon: SettingsIcon,
+      label: "Settings",
+      hoverColor: "yellow.400",
+      onClick: settingsModal.onOpen,
+      ariaLabel: "Buka pengaturan",
+    },
+  ];
+
   return (
-    <Box bgColor={"blue.500"} minH="100vh" w="100%" >
-      <Flex
-        direction={{ base: "column", md: "row" }}
-        justifyContent="center"
-        alignItems="center"
-        gap={40}
-        minH="60vh"
-        p={4}
-      >
-        {/* Modal Add Student */}
-        <Tooltip label='Tambah Mahasiswa' fontSize='xl' placement="top" hasArrow>
-          <PlusSquareIcon 
-            boxSize={40}
-            color={"white"}
-            cursor="pointer"
-            onClick={addStudentModal.onOpen}
-            _hover={{ color: "red", transform: "scale(1.2)", transition: "0.2s" }}
-          />
-        </Tooltip>
+    <Box bgColor="blue.500" minH="100vh" w="100%">
+      {/* Hero Section with Action Buttons */}
+      <Container maxW="container.xl" py={8}>
+        <Flex
+          direction={{ base: "column", sm: "row", md: "row" }}
+          wrap="wrap"
+          justifyContent="center"
+          alignItems="center"
+          gap={{ base: 14, sm: 18, md: 20, lg: 24 }}
+          minH="50vh"
+          px={4}
+        >
+          {actionButtons.map((button, index) => {
+            const Icon = button.icon;
+            return (
+              <Tooltip
+                key={index}
+                label={button.label}
+                fontSize="xl"
+                placement="top"
+                hasArrow
+                bg="gray.700"
+                color="white"
+              >
+                <IconButton
+                  icon={<Icon boxSize={{ base: 24, sm: 28, md: 32, lg: 40 }} />}
+                  aria-label={button.ariaLabel}
+                  variant="ghost"
+                  size="lg"
+                  color="white"
+                  onClick={button.onClick}
+                  _hover={{
+                    color: button.hoverColor,
+                    transform: "scale(1.1)",
+                    transition: "all 0.2s ease-in-out",
+                  }}
+                  _active={{
+                    transform: "scale(0.95)",
+                  }}
+                  sx={{
+                    "& > svg": {
+                      transition: "all 0.2s ease-in-out",
+                    },
+                  }}
+                />
+              </Tooltip>
+            );
+          })}
+        </Flex>
+      </Container>
 
-        {/* Modal Kwitansi */}
-        <Tooltip label='Buat Kwitansi' fontSize='xl' placement="top" hasArrow>
-          <EditIcon 
-            boxSize={40}
-            color={"white"}
-            cursor="pointer"
-            onClick={kwitansiModal.onOpen}
-            _hover={{ color: "green", transform: "scale(1.2)", transition: "0.2s" }}
-          />
-        </Tooltip>
+      {/* Table Section */}
+      <Box bgColor="white" borderTopRadius="3xl" shadow="xl">
+        <Container maxW="container.xl" py={8}>
+          <Stack spacing={6}>
+            <TableKwitansi />
+          </Stack>
+        </Container>
+      </Box>
 
-        {/* Settings */}
-        <Tooltip label='Settings' fontSize='xl' placement="top" hasArrow>
-          <SettingsIcon 
-            boxSize={40}
-            color={"white"}
-            cursor="pointer"
-            onClick={settingsModal.onOpen}
-            _hover={{ color: "yellow", transform: "scale(1.2)", transition: "0.2s" }}
-          />
-        </Tooltip>
-      </Flex>
-
-      <Stack bgColor={"white"} gap="5" p={5}>
-        <TableKwitansi/>
-      </Stack>
-
+      {/* Modals */}
       <ModalAddStudent
         isOpen={addStudentModal.isOpen}
         onClose={addStudentModal.onClose}
